@@ -1,45 +1,52 @@
 
-public class Customer {
-	int id;
-	Location location;
-	Location destination;
-	Cab associatedCab;
+public class Customer extends AbstractCustomer{
+	private int id;
+	private Location location;
+	private Location destination;
+	private String status;
 	
-	public Customer(int id, Location location){
+	public Customer(int id){
 		this.id = id;
-		this.location = location;
-		this.associatedCab = null;
-	}
-	
-	public Cab getAssociatedCab() {
-		return associatedCab;
 	}
 
-	public void setAssociatedCab(Cab associatedCab) {
-		this.associatedCab = associatedCab;
+	@Override
+	public void setId(int id) {
+		this.id=id;
 	}
 
+	@Override
 	public int getId() {
 		return id;
 	}
 
-	public void setId(int id) {
-		this.id = id;
-	}
-
-	public Location getLocation() {
-		return location;
-	}
-
+	@Override
 	public void setLocation(Location location) {
 		this.location = location;
 	}
 
-	public Location getDestination() {
-		return destination;
+	@Override
+	public Location getLocation() {
+		return location;
 	}
 
-	public void setDestination(Location destination) {
-		this.destination = destination;
+	@Override
+	public String getStatus() {
+		return status;
 	}
+
+	@Override
+	public void setStatus(String status) {
+		this.status = status;
+	}
+
+	@Override
+	public Location getDestination() {
+		return this.destination;
+	}
+
+	@Override
+	public void setDestination(Location location) {
+		this.destination = location;
+	}
+	
 }

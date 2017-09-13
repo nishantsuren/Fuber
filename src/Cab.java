@@ -1,55 +1,56 @@
 
-public class Cab {
+public class Cab extends AbstractCab{
 	
-	int id;
-	Location location;
-	Location destination;
-	Customer associatedCustomer;
-	
-	public Location getDestination() {
-		return destination;
-	}
+	private int id;
+	private Location location;
+	private String type;
+	private String status;
 
-
-	public void setDestination(Location destination) {
-		this.destination = destination;
-	}
-
-
-	public Customer getAssociatedCustomer() {
-		return associatedCustomer;
-	}
-
-
-	public void setAssociatedCustomer(Customer associatedCustomer) {
-		this.associatedCustomer = associatedCustomer;
-	}
-
-
-	public Cab(int id, Location location){
+	public Cab(int id, String type){
 		this.id = id;
-		this.location = location;
-		this.associatedCustomer = null;
+		this.type = type;
 	}
 
+	@Override
+	public void setType(String type) {
+		this.type = type;
+		
+	}
 
+	@Override
+	public String getType() {
+		return type;
+	}
+
+	@Override
+	public void setId(int id) {
+		this.id = id;
+		
+	}
+
+	@Override
 	public int getId() {
 		return id;
 	}
 
-
-	public void setId(int id) {
-		this.id = id;
+	@Override
+	public void setLocation(Location location) {
+		this.location = location;
 	}
 
-
+	@Override
 	public Location getLocation() {
 		return location;
 	}
 
+	@Override
+	public String getStatus() {
+		return status;
+	}
 
-	public void setLocation(Location location) {
-		this.location = location;
+	@Override
+	public void setStatus(String status) {
+		this.status = status;
 	}
 
 }

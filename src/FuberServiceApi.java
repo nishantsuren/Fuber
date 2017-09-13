@@ -1,38 +1,64 @@
+import java.util.UUID;
 
 public class FuberServiceApi {
 	
-	CabService cabService;
-	CustomerService customerService;
+	ICabService cabService;
+	ICustomerService customerService;
+	IRideService rideService;
 	
 	public FuberServiceApi(){
 		cabService = new CabService();
 		customerService = new CustomerService();
+		rideService = new RideService();
 	}
 	
-	public Cab requestCab(int custId, Location destination){
-		Customer cust = customerService.getCustomer(custId);
-		cust.setDestination(destination);
-		Location custLocation = cust.getLocation();
-		Cab cab = cabService.getAvailableCab(custLocation);
-		cab.setAssociatedCustomer(cust);
-		cust.setAssociatedCab(cab);
+	public AbstractCab requestCab(int custId, String type){
+		System.out.println("Fetching cab of type " + type + " for Customer " + custId);
+		
+		AbstractCustomer customer = customerService.getCustomer(custId);
+		AbstractCab cab = cabService.getAvailableCab(type, customer.getLocation());
 		
 		return cab;
 	}
 	
-	public void startRide(int custId, int cabId){
-		Customer cust = customerService.getCustomer(custId);
-		Cab cab = cabService.getCab(cabId);
+	public UUID startRide(int custId, int cabId, Location destination){
+		AbstractCustomer customer = customerService.getCustomer(custId);
+		System.out.println("Starting ride for customer "
+				+ custId + " from (" + customer.getLocation().getX() + ","
+						+ customer.getLocation().getY() + ") to ("
+								+ destination.getX() + "," + destination.getY() + ")"
+										+ " in cab" + cabId);
 		
-		cab.setDestination(cust.getDestination());
+		Ride ride = new Ride(custId, cabId, customer.getLocation(), destination);
 		
-		customerService.startRide(custId);
-		cabService.startRide(cabId);
+		UUID rideId = rideService.startRide(ride);
+		
+		return rideId;
 	}
 	
-	public void endRide(int custId, int cabId){
-		customerService.endRide(custId);
-		cabService.endRide(cabId);
+	public void endRide(UUID rideId){
+		System.out.println("Ending ride " + rideId);
+		
+		AbstractRide ride = rideService.getRide(rideId);
+		rideService.endRide(ride);
+	}
+	
+	public void updateCabLocation(int cabId, Location location){
+		System.out.println("Updating cab location");
+		AbstractCab cab = cabService.getCab(cabId);
+		if(cab.getLocation() != null)
+			System.out.println("Current location " + cab.getLocation().getX() + "," + cab.getLocation().getY());
+		cab.setLocation(location);
+		System.out.println("New location " + cab.getLocation().getX() + "," + cab.getLocation().getY());
+	}
+	
+	public void updateCustomerLocation(int custId, Location location){
+		System.out.println("Updating customer location");
+		AbstractCustomer cust = customerService.getCustomer(custId);
+		if(cust.getLocation() != null)
+			System.out.println("Current location " + cust.getLocation().getX() + "," + cust.getLocation().getY());
+		cust.setLocation(location);
+		System.out.println("Current location " + cust.getLocation().getX() + "," + cust.getLocation().getY());
 	}
 
 }
